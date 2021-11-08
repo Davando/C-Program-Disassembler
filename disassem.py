@@ -143,6 +143,9 @@ def populate_obj_dict():
 
 def create_html():
     f = open('compare.html', 'w')
+    path = str(subprocess.run(["pwd"], capture_output = True).stdout.decode('utf-8'))
+    print("the path is:", path)
+
     html_template = """<html>
     <head>
         <title>DISASSEMBLER</title>
@@ -154,8 +157,9 @@ def create_html():
     </head>
     <body>
         <h2>Let's compare the source code with assembly</h2>
-        <p>""" + str(datetime.datetime.now()) + """ </p>
-        <p>blah blah blah blah blah blah blah blah blah blah</p>
+        <p>"""+ path +"""</p>
+        <p>""" + path + """ </p>
+        <p>Let's compare the source code with assembly</p>
     """
 
     html_template += "<table>\n"
@@ -185,7 +189,7 @@ def create_html():
     for file in dwarf_list:
         source_file_index = 0
         html_template += """ <tr>
-        <th>""" + file[0] + """</th>
+        <td>""" + file[0] + """</td>
         </tr>
         """
        # for key in file[1]:
@@ -213,11 +217,11 @@ def create_html():
             html_template += """ <tr>
             <td>""" + "<a name="+ key +" href=#"+ key +">" + key+"</a>" +"""</td>
             <td>""" +  asm_code + """</td>
-            <td>""" + "line: " + file[1][key] + """</td>
             """
             
             if file[1][key] != last_line_num:
                 html_template += """
+                <td>""" + "line: " + file[1][key] + """</td>
                 <td>""" + source_code_lines[source_file_index][int(file[1][key])-1] +"""</td>
                 """
                 last_line_num = file[1][key]
