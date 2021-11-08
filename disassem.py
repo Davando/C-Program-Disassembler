@@ -15,6 +15,7 @@ dwarf_list = []
 ####
 obj_dict = {}
 source_dict = {}
+main_loc = ""
 
 def get_dump_file(argv): 
     
@@ -35,15 +36,13 @@ def get_dump_file(argv):
     global dwarf_dump
     clean_up_dwarf_dump(dwarf_dump_as_str)
 
-    #dwarf_dump = re.findall("0x\w{16}\s*[0-9]*", dwarf_dump_as_str)
-    #print("Here's the output")
-    #for i in dwarf_dump:
-    #    print(i)
-    # print(dwarf_dump)
-    
     # saves contents of obj-dump file as string
     obj_dump_as_str = subprocess.run(["objdump", "-d", "myprogram"], capture_output = True).stdout.decode('utf-8')
     print(obj_dump_as_str)
+
+    # finds location of main method
+    global main_loc
+    main_loc = re.search("<main>:\s*([0-9a-f]*):", obj_dump_as_str).group(1)
 
     # cleans data from obj-dump to only include address and assembly code
     lines = re.split("\n", obj_dump_as_str)
@@ -133,15 +132,8 @@ def populate_obj_dict():
     #    print(obj_dict[i])
         
 
-#def populate_source_dict():
-#    print("hi3")
-#    for i in range(len(source_code_lines)):
-#        source_dict[i+1] = source_code_lines[i]
-#    print(source_dict)
-#    for i in source_dict:
-#        print(obj_dict[i])
-
 def create_html():
+    print("main_loc:", main_loc)
     f = open('myprogram.html', 'w')
     path = str(subprocess.run(["pwd"], capture_output = True).stdout.decode('utf-8'))
     print("the path is:", path)
@@ -150,17 +142,18 @@ def create_html():
     <head>
         <title>DISASSEMBLER</title>
         <style>
-            table, td {border: 1px solid black;}
+            table, th, td {border: 1px solid black;}
             table {width:100%; border-collapse: collapse;}
-            th {display: inline; text-align: left;}
+            td {display: inline; text-align: left;}
         </style>
     </head>
     <body>
         <h2>Let's compare the source code with assembly</h2>
         <p>"""+ str(datetime.datetime.now()) +"""</p>
         <p>""" + path + """ </p>
-        <p>""" + "updated" + """ </p>
+        <p>""" + "newly updated" + """ </p>
         <p>Let's compare the source code with assembly</p>
+        <p> The main method starts at: <a href=#"""+ main_loc +">" + main_loc+"""</a>
     """
 
     html_template += "<table>\n"
@@ -176,7 +169,7 @@ def create_html():
 
     for file in dwarf_list:
         html_template += """ <tr>
-        <td>""" + file[0] + """</td>
+        <td>""" + "<a href=./"+file[0][1:-1] +">" + file[0]+"</a>" + """</td>
         </tr>
         """
         # for each key in the dictionary
