@@ -142,7 +142,7 @@ def populate_obj_dict():
 #        print(obj_dict[i])
 
 def create_html():
-    f = open('compare.html', 'w')
+    f = open('myprogram.html', 'w')
     path = str(subprocess.run(["pwd"], capture_output = True).stdout.decode('utf-8'))
     print("the path is:", path)
 
@@ -157,8 +157,9 @@ def create_html():
     </head>
     <body>
         <h2>Let's compare the source code with assembly</h2>
-        <p>"""+ path +"""</p>
+        <p>"""+ str(datetime.datetime.now()) +"""</p>
         <p>""" + path + """ </p>
+        <p>""" + "updated" + """ </p>
         <p>Let's compare the source code with assembly</p>
     """
 
@@ -170,21 +171,6 @@ def create_html():
     </tr>
     """
     print("HEEEEEEERRRRREEEEEE")
-    #print(len(source_code_lines))
-    #print(source_code_lines)
-    #print(dwarf_dict.keys())
-    #print(dwarf_dict.values())
-    #print(obj_dict.keys())
-    
-    #for key in dwarf_dict:
-    #    html_template +=  """ <tr>
-    #    <th>""" + key + """</th>
-    #    <th>""" +  obj_dict[key] + """</th>
-    #    <th>""" + "line: " + dwarf_dict[key] + """</th>
-    #    <th>""" + source_code_lines[int(dwarf_dict[key])-1] + """</th>
-    #    </tr>
-    #    """
-    
 
     for file in dwarf_list:
         source_file_index = 0
@@ -192,12 +178,9 @@ def create_html():
         <td>""" + file[0] + """</td>
         </tr>
         """
-       # for key in file[1]:
-       #     print(len(source_code_lines[source_file_index]), file[1][key])
-       # source_file_index += 1    
-       # print("NEXT")
         # for each key in the dictionary
         last_line_num = 0
+        used_line_dict = {}
         for key in file[1]:
             
             asm_code = obj_dict[key]
@@ -207,11 +190,8 @@ def create_html():
             #print("IIIICCCCCIIII")
         
             if st is not None:
-                print(st.group(1))
                 st = st.group(1)
                 replace_term = "<a href=#"+ st +">" + st+"</a>"
-                print(type(st))
-                print(type(replace_term))
                 asm_code = re.sub(st, replace_term, asm_code)
 
             html_template += """ <tr>
@@ -219,12 +199,19 @@ def create_html():
             <td>""" +  asm_code + """</td>
             """
             
+
             if file[1][key] != last_line_num:
                 html_template += """
-                <td>""" + "line: " + file[1][key] + """</td>
-                <td>""" + source_code_lines[source_file_index][int(file[1][key])-1] +"""</td>
+                <td>""" + "line: " + file[1][key] + """</td>"""
+                html_template += """<td>"""
+                #if used_line_dict.get(file[1][key], False):
+                #    html_template += """<td style = "background-color: grey;">"""
+                #else:
+                #    html_template += """<td>"""
+                html_template += source_code_lines[source_file_index][int(file[1][key])-1] +"""</td>
                 """
                 last_line_num = file[1][key]
+                used_line_dict[file[1][key]] = True
 
             html_template += """
             </tr>
@@ -239,7 +226,7 @@ def create_html():
     """
     f.write(html_template)
     f.close()
-    webbrowser.open('compare.html') 
+    webbrowser.open('myprogram.html') 
     print("IT WORKS!")
 
 if __name__ == "__main__":
