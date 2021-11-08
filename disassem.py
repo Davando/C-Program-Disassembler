@@ -144,7 +144,6 @@ def create_html():
         <style>
             table, th, td {border: 1px solid black;}
             table {width:100%; border-collapse: collapse;}
-            td {display: inline; text-align: left;}
         </style>
     </head>
     <body>
