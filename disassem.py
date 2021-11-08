@@ -166,7 +166,7 @@ def create_html():
     """
     f.write(html_template)
     f.close()
-    # webbrowser.open('myprogram.html') 
+    webbrowser.open('myprogram.html') 
     print("IT WORKS! The html file has been made.")
 
 if __name__ == "__main__":
