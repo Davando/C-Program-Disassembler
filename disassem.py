@@ -9,16 +9,11 @@ dwarf_dump = ""
 obj_dump = []
 source_code_lines = []
 
-dwarf_dict = {}
-####
 dwarf_list = []
-####
 obj_dict = {}
-source_dict = {}
 main_loc = ""
 
 def get_dump_file(argv): 
-    
     # creates gcc arguments from command line file arguments
     argument_files = "gcc -g3 -o myprogram "
     for arg in argv:
@@ -29,7 +24,7 @@ def get_dump_file(argv):
     
     # saves contents of dwarf-dump file as string 
     dwarf_dump_as_str = subprocess.run(["llvm-dwarfdump", "--debug-line", "myprogram"], capture_output = True).stdout.decode('utf-8')
-    print(dwarf_dump_as_str)
+   # print(dwarf_dump_as_str)
 
     # cleans data from dwarf dump file to only include address and source code
     # file line number
@@ -38,7 +33,7 @@ def get_dump_file(argv):
 
     # saves contents of obj-dump file as string
     obj_dump_as_str = subprocess.run(["objdump", "-d", "myprogram"], capture_output = True).stdout.decode('utf-8')
-    print(obj_dump_as_str)
+    # print(obj_dump_as_str)
 
     # finds location of main method
     global main_loc
@@ -51,9 +46,6 @@ def get_dump_file(argv):
         if len(temp) != 0:
             temp = re.sub("\\t", " ", line)
             obj_dump.append(temp)
-
-    #for i in obj_dump:
-    #    print(i)
 
 def clean_up_dwarf_dump(raw_dwarf_dump):
     file_dump = re.split("debug_line\[.*\]", raw_dwarf_dump)
@@ -69,16 +61,10 @@ def clean_up_dwarf_dump(raw_dwarf_dump):
         if file_name is not None:
             dic = {}   
             for line in address_and_line:
-                #address = re.findall("401\w+", line)
                 address = re.search("0x0*([a-f0-9]*)", line).group(1)
                 line_num = re.split("\s+", line)
                 dic[address] = line_num[1]
             dwarf_list.append([file_name.group(), dic])
-
-    #print("DUUUUMMMPP LIIISSSTTT")
-    #for lst in dwarf_list:
-    #    print(lst)
-
 
 def get_c_files(argv):
     # Saves input .c files to a list by line number
@@ -88,38 +74,7 @@ def get_c_files(argv):
         text_file = f.read()
         source_code_lines.append(re.split("\n", text_file))
         
-   # print("ICCCCCCCCCIIIIIIIII")
-   # for i in source_code_lines:
-   #     index = 1
-   #     for j in i:
-   #         print(index, j)
-   #         index += 1
-    # adds contents of each source code files to a dictionary using the file
-    # name as key and the contents of the file as value
-    
-
-    # prints source code along with line numbers
-    #for file in source_code_lines:
-    #    index = 1
-    #    for line in file:
-    #        print(index, line)
-    #        index += 1
-         
-def populate_dwarf_dict():
-    print("hi1")
-    # adds contents of dwarf_dump to a dictionary dwarf_dict using the asm
-    # address as key and source code line number as value
-    global dwarf_dict
-    for line in dwarf_dump:
-        # address = re.findall("401\w+", line)
-        address = re.search("0*(\w)", line).group()
-        print("address2", address)
-        line_num = re.split("\s+", line)
-        dwarf_dict[address[0]] = line_num[1]
-    #print(dwarf_dict)
-
 def populate_obj_dict():
-    print("hi2")
     # adds contents of obj_dump to a dictionary obj_dict using asm address as
     # key and the corresponding asm code as value
     global obj_dump
@@ -127,16 +82,10 @@ def populate_obj_dict():
         dump = re.split(":\W+", line)
         address = re.findall("\w+", line)
         obj_dict[address[0]] = dump[1]
-    #print(obj_dict)
-    #for i in obj_dict:
-    #    print(obj_dict[i])
-        
 
 def create_html():
-    print("main_loc:", main_loc)
     f = open('myprogram.html', 'w')
     path = str(subprocess.run(["pwd"], capture_output = True).stdout.decode('utf-8'))
-    print("the path is:", path)
 
     html_template = """<html>
     <head>
@@ -147,22 +96,23 @@ def create_html():
         </style>
     </head>
     <body>
-        <h2>Let's compare the source code with assembly</h2>
+        <h2>David Wang | CSC254 Disassembler Assignment</h2>
+        <p>When and where the disassembler tool is used:</p>
+
         <p>"""+ str(datetime.datetime.now()) +"""</p>
         <p>""" + path + """ </p>
-        <p>""" + "newly updated" + """ </p>
-        <p>Let's compare the source code with assembly</p>
+        <p>Let's compare the assembly code with the source c code</p>
         <p> The main method starts at: <a href=#"""+ main_loc +">" + main_loc+"""</a>
     """
 
     html_template += "<table>\n"
     
     html_template +=  """ <tr>
+    <th> </th>
     <th>Assembly Code</th>
     <th>Source Code</th>
     </tr>
     """
-    print("HEEEEEEERRRRREEEEEE")
     
     source_file_index = 0
 
@@ -177,10 +127,7 @@ def create_html():
         for key in file[1]:
             
             asm_code = obj_dict[key]
-            #print(asm_code) 
-            #st = re.search("j[pqmnle].*([a-f0-9]*)", asm_code)
             st = re.search("j[a-z]*\s*([a-f0-9]*)", asm_code)
-            #print("IIIICCCCCIIII")
         
             if st is not None:
                 st = st.group(1)
@@ -219,13 +166,11 @@ def create_html():
     """
     f.write(html_template)
     f.close()
-    webbrowser.open('myprogram.html') 
-    print("IT WORKS!")
+    # webbrowser.open('myprogram.html') 
+    print("IT WORKS! The html file has been made.")
 
 if __name__ == "__main__":
-    #get_dump_file(["test.c", "test1.c", "test2.c"])
     get_dump_file(sys.argv[1:])
     get_c_files(sys.argv[1:])
-    #populate_dwarf_dict()
     populate_obj_dict()
     create_html()
