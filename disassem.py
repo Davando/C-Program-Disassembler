@@ -171,9 +171,10 @@ def create_html():
     </tr>
     """
     print("HEEEEEEERRRRREEEEEE")
+    
+    source_file_index = 0
 
     for file in dwarf_list:
-        source_file_index = 0
         html_template += """ <tr>
         <td>""" + file[0] + """</td>
         </tr>

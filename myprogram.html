@@ -9,7 +9,7 @@
     </head>
     <body>
         <h2>Let's compare the source code with assembly</h2>
-        <p>2021-11-07 22:20:57.115909</p>
+        <p>2021-11-07 22:29:46.227139</p>
         <p>/home/hoover/u4/dwang56/CSC254_A4
  </p>
         <p>updated </p>
@@ -166,42 +166,42 @@
             <td><a name=4011ee href=#4011ee>4011ee</a></td>
             <td>55                    push   %rbp</td>
             
-                <td>line: 2</td><td><td></td>
+                <td>line: 2</td><td><td>int printNum() {   </td>
                 
             </tr>
              <tr>
             <td><a name=4011f6 href=#4011f6>4011f6</a></td>
             <td>bf 82 20 40 00        mov    $0x402082,%edi</td>
             
-                <td>line: 5</td><td><td>  printf("Enter a positive integer: ");</td>
+                <td>line: 5</td><td><td>    printf("Enter an integer: ");  </td>
                 
             </tr>
              <tr>
             <td><a name=401205 href=#401205>401205</a></td>
             <td>48 8d 45 fc           lea    -0x4(%rbp),%rax</td>
             
-                <td>line: 8</td><td><td>  for (i = 2; i <= n / 2; ++i) {</td>
+                <td>line: 8</td><td><td>    scanf("%d", &number);</td>
                 
             </tr>
              <tr>
             <td><a name=40121b href=#40121b>40121b</a></td>
             <td>8b 45 fc              mov    -0x4(%rbp),%eax</td>
             
-                <td>line: 11</td><td><td>      flag = 1;</td>
+                <td>line: 11</td><td><td>    printf("You entered: %d", number);</td>
                 
             </tr>
              <tr>
             <td><a name=40122f href=#40122f>40122f</a></td>
             <td>b8 00 00 00 00        mov    $0x0,%eax</td>
             
-                <td>line: 13</td><td><td>    }</td>
+                <td>line: 13</td><td><td>    return 0;</td>
                 
             </tr>
              <tr>
             <td><a name=401234 href=#401234>401234</a></td>
             <td>c9                    leaveq </td>
             
-                <td>line: 14</td><td><td>  }</td>
+                <td>line: 14</td><td><td>}</td>
                 
             </tr>
              <tr>
@@ -211,14 +211,14 @@
             <td><a name=401236 href=#401236>401236</a></td>
             <td>55                    push   %rbp</td>
             
-                <td>line: 2</td><td><td></td>
+                <td>line: 2</td><td><td>int printFib() {</td>
                 
             </tr>
              <tr>
             <td><a name=40123e href=#40123e>40123e</a></td>
             <td>c7 45 f0 00 00 00 00  movl   $0x0,-0x10(%rbp)</td>
             
-                <td>line: 7</td><td><td></td>
+                <td>line: 7</td><td><td>  int t1 = 0, t2 = 1;</td>
                 
             </tr>
              <tr>
@@ -230,35 +230,35 @@
             <td><a name=40124c href=#40124c>40124c</a></td>
             <td>8b 55 f0              mov    -0x10(%rbp),%edx</td>
             
-                <td>line: 10</td><td><td>    if (n % i == 0) {</td>
+                <td>line: 10</td><td><td>  int nextTerm = t1 + t2;</td>
                 
             </tr>
              <tr>
             <td><a name=401257 href=#401257>401257</a></td>
             <td>bf a8 20 40 00        mov    $0x4020a8,%edi</td>
             
-                <td>line: 13</td><td><td>    }</td>
+                <td>line: 13</td><td><td>  printf("Enter the number of terms: ");</td>
                 
             </tr>
              <tr>
             <td><a name=401266 href=#401266>401266</a></td>
             <td>48 8d 45 ec           lea    -0x14(%rbp),%rax</td>
             
-                <td>line: 14</td><td><td>  }</td>
+                <td>line: 14</td><td><td>  scanf("%d", &n);</td>
                 
             </tr>
              <tr>
             <td><a name=40127c href=#40127c>40127c</a></td>
             <td>8b 55 f8              mov    -0x8(%rbp),%edx</td>
             
-                <td>line: 17</td><td><td>    printf("1 is neither prime nor composite.");</td>
+                <td>line: 17</td><td><td>  printf("Fibonacci Series: %d, %d, ", t1, t2);</td>
                 
             </tr>
              <tr>
             <td><a name=401293 href=#401293>401293</a></td>
             <td>c7 45 fc 03 00 00 00  movl   $0x3,-0x4(%rbp)</td>
             
-                <td>line: 20</td><td><td>    if (flag == 0)</td>
+                <td>line: 20</td><td><td>  for (i = 3; i <= n; ++i) {</td>
                 
             </tr>
              <tr>
@@ -270,35 +270,35 @@
             <td><a name=40129c href=#40129c>40129c</a></td>
             <td>8b 45 f4              mov    -0xc(%rbp),%eax</td>
             
-                <td>line: 21</td><td><td>      printf("%d is a prime number.", n);</td>
+                <td>line: 21</td><td><td>    printf("%d, ", nextTerm);</td>
                 
             </tr>
              <tr>
             <td><a name=4012b0 href=#4012b0>4012b0</a></td>
             <td>8b 45 f8              mov    -0x8(%rbp),%eax</td>
             
-                <td>line: 22</td><td><td>    else</td>
+                <td>line: 22</td><td><td>    t1 = t2;</td>
                 
             </tr>
              <tr>
             <td><a name=4012b6 href=#4012b6>4012b6</a></td>
             <td>8b 45 f4              mov    -0xc(%rbp),%eax</td>
             
-                <td>line: 23</td><td><td>      printf("%d is not a prime number.", n);</td>
+                <td>line: 23</td><td><td>    t2 = nextTerm;</td>
                 
             </tr>
              <tr>
             <td><a name=4012bc href=#4012bc>4012bc</a></td>
             <td>8b 55 f0              mov    -0x10(%rbp),%edx</td>
             
-                <td>line: 24</td><td><td>  }</td>
+                <td>line: 24</td><td><td>    nextTerm = t1 + t2;</td>
                 
             </tr>
              <tr>
             <td><a name=4012c7 href=#4012c7>4012c7</a></td>
             <td>83 45 fc 01           addl   $0x1,-0x4(%rbp)</td>
             
-                <td>line: 20</td><td><td style = "background-color: grey;">    if (flag == 0)</td>
+                <td>line: 20</td><td><td style = "background-color: grey;">  for (i = 3; i <= n; ++i) {</td>
                 
             </tr>
              <tr>
@@ -310,14 +310,14 @@
             <td><a name=4012d3 href=#4012d3>4012d3</a></td>
             <td>b8 00 00 00 00        mov    $0x0,%eax</td>
             
-                <td>line: 27</td><td><td>}</td>
+                <td>line: 27</td><td><td>  return 0;</td>
                 
             </tr>
              <tr>
             <td><a name=4012d8 href=#4012d8>4012d8</a></td>
             <td>c9                    leaveq </td>
             
-                <td>line: 28</td><td><td></td>
+                <td>line: 28</td><td><td>}</td>
                 
             </tr>
             </table>
