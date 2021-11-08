@@ -204,10 +204,10 @@ def create_html():
                 html_template += """
                 <td>""" + "line: " + file[1][key] + """</td>"""
                 html_template += """<td>"""
-                #if used_line_dict.get(file[1][key], False):
-                #    html_template += """<td style = "background-color: grey;">"""
-                #else:
-                #    html_template += """<td>"""
+                if used_line_dict.get(file[1][key], False):
+                    html_template += """<td style = "background-color: grey;">"""
+                else:
+                    html_template += """<td>"""
                 html_template += source_code_lines[source_file_index][int(file[1][key])-1] +"""</td>
                 """
                 last_line_num = file[1][key]
